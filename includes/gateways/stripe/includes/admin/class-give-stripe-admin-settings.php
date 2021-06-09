@@ -11,6 +11,9 @@
  */
 
 // Exit, if accessed directly.
+use Give\Helpers\Hooks;
+use Give\PaymentGateways\Stripe\Admin\AccountManagerSettingField;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -76,7 +79,7 @@ if ( ! class_exists( 'Give_Stripe_Admin_Settings' ) ) {
 			add_filter( 'give_get_settings_gateways', [ $this, 'register_settings' ] );
 			add_filter( 'give_get_sections_advanced', [ $this, 'register_advanced_sections' ] );
 			add_filter( 'give_get_settings_advanced', [ $this, 'register_advanced_settings' ], 10, 1 );
-			add_action( 'give_admin_field_stripe_account_manager', [ $this, 'stripe_account_manager_field' ], 10, 2 );
+			Hooks::addAction( 'give_admin_field_stripe_account_manager', AccountManagerSettingField::class, 'handle' );
 			add_action( 'give_admin_field_stripe_webhooks', [ $this, 'stripe_webhook_field' ], 10, 2 );
 			add_action( 'give_admin_field_stripe_styles_field', [ $this, 'stripe_styles_field' ], 10, 2 );
 			add_action( 'give_disconnect_connected_stripe_account', [ $this, 'disconnect_connected_stripe_account' ] );
@@ -768,27 +771,27 @@ if ( ! class_exists( 'Give_Stripe_Admin_Settings' ) ) {
 											</span>
 											<span class="give-stripe-account-edit">
 												<?php if ( 'connect' !== $details['type'] ) { ?>
-												<a class="give-stripe-account-edit-name" href="#"><?php esc_html_e( 'Edit', 'give' ); ?></a>
-												<a
-													class="give-stripe-account-update-name give-hidden"
-													href="#"
-													data-account="<?php echo $slug; ?>"
-												><?php esc_html_e( 'Update', 'give' ); ?></a>
-												<a class="give-stripe-account-cancel-name give-hidden" href="#"><?php esc_html_e( 'Cancel', 'give' ); ?></a>
+													<a class="give-stripe-account-edit-name" href="#"><?php esc_html_e( 'Edit', 'give' ); ?></a>
+													<a
+														class="give-stripe-account-update-name give-hidden"
+														href="#"
+														data-account="<?php echo $slug; ?>"
+													><?php esc_html_e( 'Update', 'give' ); ?></a>
+													<a class="give-stripe-account-cancel-name give-hidden" href="#"><?php esc_html_e( 'Cancel', 'give' ); ?></a>
 												<?php } ?>
-											<?php if ( $slug === $default_account ) { ?>
-												<span class="give-stripe-account-default give-stripe-account-badge">
+												<?php if ( $slug === $default_account ) { ?>
+													<span class="give-stripe-account-default give-stripe-account-badge">
 													<?php esc_html_e( 'Default Account', 'give' ); ?>
 												</span>
-											<?php } else { ?>
-												<span class="give-stripe-account-default">
+												<?php } else { ?>
+													<span class="give-stripe-account-default">
 													<a
 														data-account="<?php echo $slug; ?>"
 														data-url="<?php echo give_stripe_get_admin_settings_page_url(); ?>"
 														class="give-stripe-account-set-default" href="#"
 													><?php esc_html_e( 'Set as Default', 'give' ); ?></a>
 												</span>
-											<?php } ?>
+												<?php } ?>
 
 											</span>
 										</div>
@@ -832,28 +835,28 @@ if ( ! class_exists( 'Give_Stripe_Admin_Settings' ) ) {
 								<div class="give-stripe-add-account-errors"></div>
 								<table class="form-table give-setting-tab-body give-setting-tab-body-gateways">
 									<tbody>
-									<?php
-									if ( give_stripe_is_premium_active() ) {
-										/**
-										 * This action hook will be used to load Manual API fields for premium addon.
-										 *
-										 * @param array $stripe_accounts All Stripe accounts.
-										 *
-										 * @since 2.7.0
-										 */
-										do_action( 'give_stripe_premium_manual_api_fields', $stripe_accounts );
-									}
-									?>
-									<tr valign="top" class="give-stripe-account-type-connect">
-										<th scope="row" class="titledesc">
-											<label for="stripe_connect_button">
-												<?php esc_html_e( 'Stripe Connection', 'give' ); ?>
-											</label>
-										</th>
-										<td class="give-forminp">
-											<?php echo give_stripe_connect_button(); ?>
-										</td>
-									</tr>
+										<?php
+										if ( give_stripe_is_premium_active() ) {
+											/**
+											 * This action hook will be used to load Manual API fields for premium addon.
+											 *
+											 * @param array $stripe_accounts All Stripe accounts.
+											 *
+											 * @since 2.7.0
+											 */
+											do_action( 'give_stripe_premium_manual_api_fields', $stripe_accounts );
+										}
+										?>
+										<tr valign="top" class="give-stripe-account-type-connect">
+											<th scope="row" class="titledesc">
+												<label for="stripe_connect_button">
+													<?php esc_html_e( 'Stripe Connection', 'give' ); ?>
+												</label>
+											</th>
+											<td class="give-forminp">
+												<?php echo give_stripe_connect_button(); ?>
+											</td>
+										</tr>
 									</tbody>
 								</table>
 								<?php
