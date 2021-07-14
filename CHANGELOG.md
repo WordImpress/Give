@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Added
--  Add custom donation level choice to select field if donation donated with custom amount (#5866)
+
+-   Add Facade class to give framework (#5855)
+-   Add custom donation level choice to select field if donation donated with custom amount (#5866)
 
 ### Fixed
 
@@ -16,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -  Fix "Unsupported declare strict_types" PHP warning (#5853, #5869)
 -  Add top margin to setting group page (#5864)
 -  GiveWP is not causing deprecation warnings on PHP8 anymore (#5872)
+-  Add custom donation level choice to select field if donation donated with custom amount (#5866)
 
 ### Changes
 
